@@ -4,7 +4,7 @@
   "available": true,
   "exposable": true,
   "tipi_version": 23,
-  "version": "0.11.1",
+  "version": "0.11.2",
   "port": 8677,
   "id": "stalwart-mail",
   "categories": ["media", "network", "utilities"],
