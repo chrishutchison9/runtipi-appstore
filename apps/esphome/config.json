@@ -43,9 +43,5 @@
   ],
   "supported_architectures": ["arm64", "amd64"],
   "created_at": 1723905687000,
-<<<<<<< HEAD
   "updated_at": 1741122241000
-=======
-  "updated_at": 1740409549000
->>>>>>> b7cc7825 (chore(deps): update ghcr.io/esphome/esphome docker tag to v2025 (#6911))
 }
