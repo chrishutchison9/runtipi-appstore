@@ -1,0 +1,50 @@
+{
+  "$schema": "../dynamic-compose-schema.json",
+  "services": [
+    {
+      "name": "linkding",
+      "image": "sissbruecker/linkding:1.38.1",
+      "isMain": true,
+      "internalPort": 9090,
+      "environment": {
+        "LD_DB_ENGINE": "postgres",
+        "LD_DB_DATABASE": "linkding",
+        "LD_DB_USER": "linkding",
+        "LD_DB_PASSWORD": "${LINKDING_DB_PASSWORD}",
+        "LD_DB_HOST": "linkding-db",
+        "LD_DB_PORT": "5432"
+      },
+      "volumes": [
+        {
+          "hostPath": "${APP_DATA_DIR}/data",
+          "containerPath": "/etc/linkding/data"
+        }
+      ],
+      "dependsOn": {
+        "linkding-db": {
+          "condition": "service_healthy"
+        }
+      }
+    },
+    {
+      "name": "linkding-db",
+      "image": "postgres:15-alpine",
+      "environment": {
+        "POSTGRES_DB": "linkding",
+        "POSTGRES_USER": "linkding",
+        "POSTGRES_PASSWORD": "${LINKDING_DB_PASSWORD}"
+      },
+      "volumes": [
+        {
+          "hostPath": "${APP_DATA_DIR}/data/db",
+          "containerPath": "/var/lib/postgresql/data"
+        }
+      ],
+      "healthCheck": {
+        "timeout": "5s",
+        "retries": 3,
+        "test": "pg_isready -d $$POSTGRES_DB -U $$POSTGRES_USER"
+      }
+    }
+  ]
+}
