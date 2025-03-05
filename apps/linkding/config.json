@@ -5,7 +5,7 @@
   "available": true,
   "short_desc": "Self-hosted bookmark manager that is minimal, fast, and easy to set up.",
   "author": "sissbruecker",
-  "port": 8153,
+  "port": 9090,
   "categories": ["utilities"],
   "description": "Linkding is a self-hosted bookmark manager that is designed to be minimal, fast, and easy to set up using Docker. It provides a clean UI optimized for readability and allows you to organize bookmarks with tags.",
   "tipi_version": 1,
