@@ -18,6 +18,7 @@
             pkgs.git
             pkgs.nodejs
             pkgs.yarn
+            pkgs.pnpm
           ];
         };
       });
