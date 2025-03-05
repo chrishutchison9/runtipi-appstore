@@ -22,6 +22,7 @@
       "type": "random",
       "label": "Linkding database password",
       "min": 32,
+      "max": 32,
       "env_variable": "LINKDING_DB_PASSWORD"
     }
   ]

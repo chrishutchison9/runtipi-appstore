@@ -12,14 +12,9 @@
         "LD_DB_USER": "linkding",
         "LD_DB_PASSWORD": "${LINKDING_DB_PASSWORD}",
         "LD_DB_HOST": "linkding-db",
-        "LD_DB_PORT": "5432"
+        "LD_DB_PORT": "5432",
+        "PGDATA": "/var/lib/postgresql/data"
       },
-      "volumes": [
-        {
-          "hostPath": "${APP_DATA_DIR}/data",
-          "containerPath": "/etc/linkding/data"
-        }
-      ],
       "dependsOn": {
         "linkding-db": {
           "condition": "service_healthy"
@@ -41,6 +36,7 @@
         }
       ],
       "healthCheck": {
+        "interval": "10s",
         "timeout": "5s",
         "retries": 3,
         "test": "pg_isready -d $$POSTGRES_DB -U $$POSTGRES_USER"
