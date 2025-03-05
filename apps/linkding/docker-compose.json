@@ -12,8 +12,7 @@
         "LD_DB_USER": "linkding",
         "LD_DB_PASSWORD": "${LINKDING_DB_PASSWORD}",
         "LD_DB_HOST": "linkding-db",
-        "LD_DB_PORT": "5432",
-        "PGDATA": "/var/lib/postgresql/data"
+        "LD_DB_PORT": "5432"
       },
       "dependsOn": {
         "linkding-db": {
@@ -27,7 +26,8 @@
       "environment": {
         "POSTGRES_DB": "linkding",
         "POSTGRES_USER": "linkding",
-        "POSTGRES_PASSWORD": "${LINKDING_DB_PASSWORD}"
+        "POSTGRES_PASSWORD": "${LINKDING_DB_PASSWORD}",
+        "PGDATA": "/var/lib/postgresql/data"
       },
       "volumes": [
         {
