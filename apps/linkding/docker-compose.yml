@@ -1,0 +1,63 @@
+services:
+  linkding:
+    container_name: linkding
+    image: sissbruecker/linkding:1.39.1
+    restart: unless-stopped
+    ports:
+      - ${APP_PORT}:9090
+    environment:
+      - LD_DB_ENGINE=postgres
+      - LD_DB_DATABASE=linkding
+      - LD_DB_USER=linkding
+      - LD_DB_PASSWORD=${LINKDING_DB_PASSWORD}
+      - LD_DB_HOST=linkding-db
+      - LD_DB_PORT=5432
+    volumes:
+      - ${APP_DATA_DIR}/data:/etc/linkding/data
+    networks:
+      - tipi_main_network
+    depends_on:
+      - linkding-db
+    labels:
+      # Main
+      traefik.enable: true
+      traefik.http.middlewares.linkding-web-redirect.redirectscheme.scheme: https
+      traefik.http.services.linkding.loadbalancer.server.port: 9090
+      # Web
+      traefik.http.routers.linkding-insecure.rule: Host(`${APP_DOMAIN}`)
+      traefik.http.routers.linkding-insecure.entrypoints: web
+      traefik.http.routers.linkding-insecure.service: linkding
+      traefik.http.routers.linkding-insecure.middlewares: linkding-web-redirect
+      # Websecure
+      traefik.http.routers.linkding.rule: Host(`${APP_DOMAIN}`)
+      traefik.http.routers.linkding.entrypoints: websecure
+      traefik.http.routers.linkding.service: linkding
+      traefik.http.routers.linkding.tls.certresolver: myresolver
+      # Local domain
+      traefik.http.routers.linkding-local-insecure.rule: Host(`linkding.${LOCAL_DOMAIN}`)
+      traefik.http.routers.linkding-local-insecure.entrypoints: web
+      traefik.http.routers.linkding-local-insecure.service: linkding
+      traefik.http.routers.linkding-local-insecure.middlewares: linkding-web-redirect
+      # Local domain secure
+      traefik.http.routers.linkding-local.rule: Host(`linkding.${LOCAL_DOMAIN}`)
+      traefik.http.routers.linkding-local.entrypoints: websecure
+      traefik.http.routers.linkding-local.service: linkding
+      traefik.http.routers.linkding-local.tls: true
+      # Runtipi managed
+      runtipi.managed: true
+
+  linkding-db:
+    container_name: linkding-db
+    image: postgres:15-alpine
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=linkding
+      - POSTGRES_USER=linkding
+      - POSTGRES_PASSWORD=${LINKDING_DB_PASSWORD}
+    volumes:
+      - ${APP_DATA_DIR}/data/db:/var/lib/postgresql/data
+    networks:
+      - tipi_main_network
+    labels:
+      # Runtipi managed
+      runtipi.managed: true
