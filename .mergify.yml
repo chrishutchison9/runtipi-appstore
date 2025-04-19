@@ -1,0 +1,29 @@
+pull_request_rules:
+  - name: Automatically merge updates from upstream main into custom-store
+    conditions:
+      - base=custom-store
+      - head=main
+      - author=mergify[bot]
+    actions:
+      merge:
+        method: merge
+        strict: true
+
+defaults:
+  bot_account: mergify[bot]
+
+scheduled_jobs:
+  - name: Sync custom-store branch with upstream main
+    cron: "0 */12 * * *"  # Run twice daily (every 12 hours)
+    actions:
+      create_pull_request:
+        title: "[Sync] Update custom-store with upstream main"
+        body: |
+          This is an automated PR to sync the custom-store branch with the latest changes from the upstream main branch.
+          
+          This helps keep your custom store up-to-date with the official runtipi app store while maintaining your custom modifications.
+        head: main
+        base: custom-store
+        source:
+          branch: main
+          repository: runtipi/runtipi-appstore
