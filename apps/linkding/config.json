@@ -8,14 +8,15 @@
   "port": 9090,
   "categories": ["utilities"],
   "description": "Linkding is a self-hosted bookmark manager that is designed to be minimal, fast, and easy to set up using Docker. It provides a clean UI optimized for readability and allows you to organize bookmarks with tags.",
-  "tipi_version": 13,
-  "version": "1.39.1",
+  "tipi_version": 14,
+  "version": "1.40.0",
   "source": "https://github.com/sissbruecker/linkding",
   "website": "https://github.com/sissbruecker/linkding",
   "exposable": true,
   "supported_architectures": ["arm64", "amd64"],
   "created_at": 1741025885292,
-  "updated_at": 1741153199000,
+  "updated_at": 1741153199001,
+
   "dynamic_config": true,
   "form_fields": [
     {
