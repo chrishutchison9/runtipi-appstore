@@ -2,7 +2,7 @@
   "services": [
     {
       "name": "sourcebot",
-      "image": "ghcr.io/sourcebot-dev/sourcebot:latest",
+      "image": "ghcr.io/sourcebot-dev/sourcebot:v4.10.28",
       "isMain": true,
       "internalPort": 3000,
       "environment": [
@@ -29,11 +29,19 @@
         {
           "key": "REDIS_URL",
           "value": "redis://sourcebot-redis:6379"
+        },
+        {
+          "key": "OPENAI_API_KEY",
+          "value": "${OPENAI_API_KEY}"
+        },
+        {
+          "key": "ANTHROPIC_API_KEY",
+          "value": "${ANTHROPIC_API_KEY}"
         }
       ],
       "volumes": [
         {
-          "hostPath": "${APP_DATA_DIR}/data",
+          "hostPath": "${APP_DATA_DIR}/data/app",
           "containerPath": "/data"
         }
       ],
@@ -48,11 +56,22 @@
           "condition": "service_completed_successfully"
         }
       },
-      "user": "1500:1500"
+      "user": "1500:1500",
+      "deploy": {
+        "resources": {
+          "limits": {
+            "cpus": "1.0",
+            "memory": "2g"
+          },
+          "reservations": {
+            "memory": "512m"
+          }
+        }
+      }
     },
     {
       "name": "sourcebot-postgres",
-      "image": "postgres:16",
+      "image": "postgres:16-alpine",
       "environment": [
         {
           "key": "POSTGRES_USER",
@@ -82,7 +101,7 @@
     },
     {
       "name": "sourcebot-redis",
-      "image": "redis:8",
+      "image": "redis:7-alpine",
       "volumes": [
         {
           "hostPath": "${APP_DATA_DIR}/data/redis",
@@ -98,7 +117,7 @@
     },
     {
       "name": "sourcebot-init",
-      "image": "alpine:latest",
+      "image": "alpine:3.19",
       "command": "sh -c \"if [ ! -f /data/config.json ]; then cp /sourcebot-config.json /data/config.json; fi && chown -R 1500:1500 /data\"",
       "volumes": [
         {
@@ -106,10 +125,11 @@
           "containerPath": "/sourcebot-config.json"
         },
         {
-          "hostPath": "${APP_DATA_DIR}/data",
+          "hostPath": "${APP_DATA_DIR}/data/app",
           "containerPath": "/data"
         }
-      ]
+      ],
+      "restart": "no"
     }
   ],
   "schemaVersion": 2,
