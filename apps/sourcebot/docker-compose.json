@@ -12,7 +12,7 @@
         },
         {
           "key": "AUTH_URL",
-          "value": "${APP_PROTOCOL}://${APP_DOMAIN}"
+          "value": "${APP_PROTOCOL:-http}://${APP_DOMAIN}"
         },
         {
           "key": "AUTH_SECRET",
@@ -60,13 +60,15 @@
       "deploy": {
         "resources": {
           "limits": {
-            "cpus": "1.0",
             "memory": "2g"
-          },
-          "reservations": {
-            "memory": "512m",
-            "devices": []
           }
+        }
+      },
+      "logging": {
+        "driver": "json-file",
+        "options": {
+          "max-size": "10mb",
+          "max-file": "1"
         }
       }
     },

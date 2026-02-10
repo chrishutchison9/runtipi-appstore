@@ -11,7 +11,7 @@ services:
       - ${APP_DATA_DIR}/data/app:/data
     environment:
       - CONFIG_PATH=/data/config.json
-      - AUTH_URL=${APP_PROTOCOL}://${APP_DOMAIN}
+      - AUTH_URL=${APP_PROTOCOL:-http}://${APP_DOMAIN}
       - AUTH_SECRET=${AUTH_SECRET}
       - SOURCEBOT_ENCRYPTION_KEY=${SOURCEBOT_ENCRYPTION_KEY}
       - DATABASE_URL=postgresql://sourcebot:${SOURCEBOT_POSTGRES_PASSWORD}@sourcebot-postgres:5432/sourcebot
@@ -62,4 +62,9 @@ services:
       - ./sourcebot-config.json:/sourcebot-config.json
       - ${APP_DATA_DIR}/data/app:/data
     restart: "no"
+    logging:
+      driver: json-file
+      options:
+        max-size: 10mb
+        max-file: "1"
   # This file is for local development only. RunTipi uses docker-compose.json.

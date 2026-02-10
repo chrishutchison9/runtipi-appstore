@@ -8,9 +8,10 @@
   "short_desc": "Self-hosted tool that helps developers and agents understand your codebase.",
   "author": "https://sourcebot.dev",
   "port": 3000,
-  "categories": ["development", "utilities"],
+  "categories": ["development", "utilities", "ai"],
   "description": "Sourcebot is a self-hosted tool that helps you understand your codebase. Ask Sourcebot: Ask questions about your codebase and have Sourcebot provide detailed answers grounded with inline citations. Code search: Search and navigate across all your repos and branches, no matter where they're hosted.",
-  "tipi_version": 1,
+  "tipi_version": 2,
+  "min_tipi_version": "4.5.0",
   "version": "v4.10.28",
   "source": "https://github.com/sourcebot-dev/sourcebot",
   "website": "https://sourcebot.dev",
@@ -42,13 +43,17 @@
       "env_variable": "OPENAI_API_KEY",
       "label": "OpenAI API Key",
       "type": "password",
-      "description": "Optional: Required for Sourcebot's AI features"
+      "description": "Optional: Required for Sourcebot's AI features",
+      "hint": "Optional. Enables AI features in Sourcebot.",
+      "placeholder": "paste-your-openai-key"
     },
     {
       "env_variable": "ANTHROPIC_API_KEY",
       "label": "Anthropic API Key",
       "type": "password",
-      "description": "Optional: Used for Sourcebot's AI features"
+      "description": "Optional: Used for Sourcebot's AI features",
+      "hint": "Optional. Enables AI features in Sourcebot.",
+      "placeholder": "paste-your-anthropic-key"
     }
   ],
   "supported_architectures": ["amd64", "arm64"],
