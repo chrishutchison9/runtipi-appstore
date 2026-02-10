@@ -116,7 +116,11 @@
     {
       "name": "sourcebot-init",
       "image": "alpine:3.19",
-      "command": "sh -c \"if [ ! -f /data/config.json ]; then cat << 'EOF' > /data/config.json\\n{\\n  \\\"$schema\\\": \\\"https://raw.githubusercontent.com/sourcebot-dev/sourcebot/main/schemas/v3/index.json\\\",\\n  \\\"connections\\\": {\\n    \\\"starter-connection\\\": {\\n      \\\"type\\\": \\\"github\\\",\\n      \\\"repos\\\": [\\n        \\\"sourcebot-dev/sourcebot\\\"\\n      ]\\n    }\\n  }\\n}\\nEOF\\nfi && chown -R 1500:1500 /data\"",
+      "command": [
+        "sh",
+        "-c",
+        "if [ ! -f /data/config.json ]; then printf '%s\n' '{\"$schema\":\"https://raw.githubusercontent.com/sourcebot-dev/sourcebot/main/schemas/v3/index.json\",\"connections\":{\"starter-connection\":{\"type\":\"github\",\"repos\":[\"sourcebot-dev/sourcebot\"]}}}' > /data/config.json; fi && chown -R 1500:1500 /data"
+      ],
       "volumes": [
         {
           "hostPath": "${APP_DATA_DIR}/data/app",
