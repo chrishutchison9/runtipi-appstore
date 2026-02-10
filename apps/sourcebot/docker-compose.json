@@ -1,0 +1,117 @@
+{
+  "services": [
+    {
+      "name": "sourcebot",
+      "image": "ghcr.io/sourcebot-dev/sourcebot:latest",
+      "isMain": true,
+      "internalPort": 3000,
+      "environment": [
+        {
+          "key": "CONFIG_PATH",
+          "value": "/data/config.json"
+        },
+        {
+          "key": "AUTH_URL",
+          "value": "${APP_PROTOCOL}://${APP_DOMAIN}"
+        },
+        {
+          "key": "AUTH_SECRET",
+          "value": "${AUTH_SECRET}"
+        },
+        {
+          "key": "SOURCEBOT_ENCRYPTION_KEY",
+          "value": "${SOURCEBOT_ENCRYPTION_KEY}"
+        },
+        {
+          "key": "DATABASE_URL",
+          "value": "postgresql://sourcebot:${SOURCEBOT_POSTGRES_PASSWORD}@sourcebot-postgres:5432/sourcebot"
+        },
+        {
+          "key": "REDIS_URL",
+          "value": "redis://sourcebot-redis:6379"
+        }
+      ],
+      "volumes": [
+        {
+          "hostPath": "${APP_DATA_DIR}/data",
+          "containerPath": "/data"
+        }
+      ],
+      "dependsOn": {
+        "sourcebot-postgres": {
+          "condition": "service_healthy"
+        },
+        "sourcebot-redis": {
+          "condition": "service_healthy"
+        },
+        "sourcebot-init": {
+          "condition": "service_completed_successfully"
+        }
+      },
+      "user": "1500:1500"
+    },
+    {
+      "name": "sourcebot-postgres",
+      "image": "postgres:16",
+      "environment": [
+        {
+          "key": "POSTGRES_USER",
+          "value": "sourcebot"
+        },
+        {
+          "key": "POSTGRES_PASSWORD",
+          "value": "${SOURCEBOT_POSTGRES_PASSWORD}"
+        },
+        {
+          "key": "POSTGRES_DB",
+          "value": "sourcebot"
+        }
+      ],
+      "volumes": [
+        {
+          "hostPath": "${APP_DATA_DIR}/data/postgres",
+          "containerPath": "/var/lib/postgresql/data"
+        }
+      ],
+      "healthCheck": {
+        "test": "CMD-SHELL pg_isready -U sourcebot",
+        "interval": "3s",
+        "timeout": "3s",
+        "retries": 10
+      }
+    },
+    {
+      "name": "sourcebot-redis",
+      "image": "redis:8",
+      "volumes": [
+        {
+          "hostPath": "${APP_DATA_DIR}/data/redis",
+          "containerPath": "/data"
+        }
+      ],
+      "healthCheck": {
+        "test": "CMD redis-cli ping",
+        "interval": "3s",
+        "timeout": "10s",
+        "retries": 10
+      }
+    },
+    {
+      "name": "sourcebot-init",
+      "image": "alpine:latest",
+      "command": "sh -c \"if [ ! -f /data/config.json ]; then cp /sourcebot-config.json /data/config.json; fi && chown -R 1500:1500 /data\"",
+      "volumes": [
+        {
+          "hostPath": "./sourcebot-config.json",
+          "containerPath": "/sourcebot-config.json"
+        },
+        {
+          "hostPath": "${APP_DATA_DIR}/data",
+          "containerPath": "/data"
+        }
+      ]
+    }
+  ],
+  "schemaVersion": 2,
+  "$schema": "https://schemas.runtipi.io/v2/dynamic-compose.json"
+}
