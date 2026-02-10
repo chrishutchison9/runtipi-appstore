@@ -128,7 +128,7 @@
       "command": [
         "sh",
         "-c",
-        "if [ ! -f /data/config.json ]; then printf '%s\n' '{\"$schema\":\"https://raw.githubusercontent.com/sourcebot-dev/sourcebot/main/schemas/v3/index.json\",\"connections\":{\"starter-connection\":{\"type\":\"github\",\"repos\":[\"sourcebot-dev/sourcebot\"]}}}' > /data/config.json; fi && chown -R 1500:1500 /data"
+        "if [ ! -f /data/config.json ]; then printf '%s\n' '{\"environmentOverrides\":{}}' > /data/config.json; fi && chown -R 1500:1500 /data"
       ],
       "volumes": [
         {
