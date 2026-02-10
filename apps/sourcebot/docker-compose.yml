@@ -1,3 +1,4 @@
+version: "3.7"
 services:
   sourcebot:
     image: ghcr.io/sourcebot-dev/sourcebot:latest
