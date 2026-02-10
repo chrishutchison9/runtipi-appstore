@@ -99,7 +99,7 @@
         }
       ],
       "healthCheck": {
-        "test": "CMD-SHELL PGCONNECT_TIMEOUT=2 pg_isready -h 127.0.0.1 -U sourcebot -d sourcebot",
+        "test": "pg_isready -d sourcebot -U sourcebot",
         "interval": "5s",
         "timeout": "5s",
         "retries": 12,
