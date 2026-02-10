@@ -1,0 +1,81 @@
+version: "3.7"
+
+services:
+  sourcebot:
+    image: ghcr.io/sourcebot-dev/sourcebot:latest
+    container_name: sourcebot
+    restart: unless-stopped
+    user: "1500:1500"
+    ports:
+      - ${APP_PORT}:3000
+    volumes:
+      - ${APP_DATA_DIR}/data:/data
+    environment:
+      - CONFIG_PATH=/data/config.json
+      - AUTH_URL=${APP_PROTOCOL}://${APP_DOMAIN}
+      - AUTH_SECRET=${AUTH_SECRET}
+      - SOURCEBOT_ENCRYPTION_KEY=${SOURCEBOT_ENCRYPTION_KEY}
+      - DATABASE_URL=postgresql://sourcebot:${SOURCEBOT_POSTGRES_PASSWORD}@sourcebot-postgres:5432/sourcebot
+      - REDIS_URL=redis://sourcebot-redis:6379
+    depends_on:
+      sourcebot-postgres:
+        condition: service_healthy
+      sourcebot-redis:
+        condition: service_healthy
+      sourcebot-init:
+        condition: service_completed_successfully
+    networks:
+      - tipi_main_network
+    labels:
+      traefik.enable: true
+      traefik.http.routers.sourcebot.rule: Host(`${APP_DOMAIN}`)
+      traefik.http.routers.sourcebot.entrypoints: websecure
+      traefik.http.routers.sourcebot.tls.certresolver: myresolver
+      traefik.http.services.sourcebot.loadbalancer.server.port: 3000
+      runtipi.managed: true
+
+  sourcebot-postgres:
+    image: postgres:16
+    container_name: sourcebot-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: sourcebot
+      POSTGRES_PASSWORD: ${SOURCEBOT_POSTGRES_PASSWORD}
+      POSTGRES_DB: sourcebot
+    volumes:
+      - ${APP_DATA_DIR}/data/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sourcebot"]
+      interval: 3s
+      timeout: 3s
+      retries: 10
+    networks:
+      - tipi_main_network
+    labels:
+      runtipi.managed: true
+
+  sourcebot-redis:
+    image: redis:8
+    container_name: sourcebot-redis
+    restart: unless-stopped
+    volumes:
+      - ${APP_DATA_DIR}/data/redis:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 3s
+      timeout: 10s
+      retries: 10
+    networks:
+      - tipi_main_network
+    labels:
+      runtipi.managed: true
+
+  sourcebot-init:
+    image: alpine:latest
+    container_name: sourcebot-init
+    command: sh -c "if [ ! -f /data/config.json ]; then cp /sourcebot-config.json /data/config.json; fi && chown -R 1500:1500 /data"
+    volumes:
+      - ./sourcebot-config.json:/sourcebot-config.json
+      - ${APP_DATA_DIR}/data:/data
+    labels:
+      runtipi.managed: true

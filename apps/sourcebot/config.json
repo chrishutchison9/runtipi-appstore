@@ -1,0 +1,42 @@
+{
+  "name": "Sourcebot",
+  "id": "sourcebot",
+  "available": true,
+  "dynamic_config": false,
+  "short_desc": "Self-hosted tool that helps developers and agents understand your codebase.",
+  "author": "https://sourcebot.dev",
+  "port": 3000,
+  "categories": ["development", "utilities"],
+  "description": "Sourcebot is a self-hosted tool that helps you understand your codebase. Ask Sourcebot: Ask questions about your codebase and have Sourcebot provide detailed answers grounded with inline citations. Code search: Search and navigate across all your repos and branches, no matter where they're hosted.",
+  "tipi_version": 1,
+  "version": "latest",
+  "source": "https://github.com/sourcebot-dev/sourcebot",
+  "website": "https://sourcebot.dev",
+  "exposable": true,
+  "form_fields": [
+    {
+      "env_variable": "AUTH_SECRET",
+      "label": "Auth Secret",
+      "type": "random",
+      "min": 33,
+      "max": 33,
+      "encoding": "base64"
+    },
+    {
+      "env_variable": "SOURCEBOT_ENCRYPTION_KEY",
+      "label": "Encryption Key",
+      "type": "random",
+      "min": 24,
+      "max": 24,
+      "encoding": "base64"
+    },
+    {
+      "env_variable": "SOURCEBOT_POSTGRES_PASSWORD",
+      "label": "Postgres Password",
+      "type": "random",
+      "min": 32
+    }
+  ],
+  "supported_architectures": ["amd64", "arm64"],
+  "$schema": "../app-info-schema.json"
+}
