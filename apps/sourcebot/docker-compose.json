@@ -122,10 +122,10 @@
         }
       ],
       "healthCheck": {
-        "test": "CMD-SHELL redis-cli -h 127.0.0.1 ping || exit 1",
-        "interval": "5s",
-        "timeout": "5s",
-        "retries": 12,
+        "test": "CMD redis-cli ping",
+        "interval": "3s",
+        "timeout": "10s",
+        "retries": 10,
         "startPeriod": "20s"
       }
     },
