@@ -1,8 +1,10 @@
 {
+  "$schema": "https://schemas.runtipi.io/v2/dynamic-compose.json",
+  "schemaVersion": 2,
   "services": [
     {
       "name": "2fauth",
-      "image": "2fauth/2fauth:5.5.2",
+      "image": "2fauth/2fauth:6.0.0",
       "internalPort": 8000,
       "isMain": true,
       "volumes": [
@@ -11,11 +13,12 @@
           "containerPath": "/2fauth"
         }
       ],
-      "environment": {
-        "ASSET_URL": "https://${APP_DOMAIN}",
-        "APP_URL": "https://${APP_DOMAIN}"
-      }
+      "environment": [
+        { "key": "ASSET_URL", "value": "${APP_PROTOCOL:-http}://${APP_DOMAIN}" },
+        { "key": "APP_URL", "value": "${APP_PROTOCOL:-http}://${APP_DOMAIN}" },
+        { "key": "APP_KEY", "value": "${TWOFAUTH_APP_KEY}" },
+        { "key": "PREVIOUS_APP_KEY", "value": "APP_PREVIOUS_KEYS=SomeRandomStringOf32CharsExactly" }
+      ]
     }
-  ],
-  "$schema": "../dynamic-compose-schema.json"
+  ]
 }
