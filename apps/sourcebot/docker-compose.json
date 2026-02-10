@@ -54,7 +54,7 @@
           "condition": "service_healthy"
         },
         "sourcebot-redis": {
-          "condition": "service_healthy"
+          "condition": "service_started"
         },
         "sourcebot-init": {
           "condition": "service_completed_successfully"
