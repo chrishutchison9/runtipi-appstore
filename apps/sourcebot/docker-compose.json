@@ -106,11 +106,11 @@
         }
       ],
       "healthCheck": {
-        "test": "CMD redis-cli ping",
-        "interval": "3s",
-        "timeout": "10s",
+        "test": "CMD-SHELL redis-cli -h 127.0.0.1 ping | grep PONG",
+        "interval": "5s",
+        "timeout": "5s",
         "retries": 10,
-        "startPeriod": "10s"
+        "startPeriod": "20s"
       }
     },
     {
