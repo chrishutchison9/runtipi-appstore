@@ -99,11 +99,11 @@
         }
       ],
       "healthCheck": {
-        "test": "CMD-SHELL pg_isready -U sourcebot",
-        "interval": "3s",
-        "timeout": "3s",
-        "retries": 10,
-        "startPeriod": "20s"
+        "test": "CMD-SHELL PGCONNECT_TIMEOUT=2 pg_isready -h 127.0.0.1 -U sourcebot -d sourcebot",
+        "interval": "5s",
+        "timeout": "5s",
+        "retries": 12,
+        "startPeriod": "30s"
       }
     },
     {
@@ -122,10 +122,10 @@
         }
       ],
       "healthCheck": {
-        "test": "CMD-SHELL redis-cli -h 127.0.0.1 ping | grep PONG",
+        "test": "CMD-SHELL redis-cli -h 127.0.0.1 ping || exit 1",
         "interval": "5s",
         "timeout": "5s",
-        "retries": 10,
+        "retries": 12,
         "startPeriod": "20s"
       }
     },
