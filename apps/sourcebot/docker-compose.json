@@ -16,7 +16,7 @@
         },
         {
           "key": "AUTH_URL",
-          "value": "${APP_PROTOCOL:-http}://${APP_DOMAIN}"
+          "value": "${APP_PROTOCOL:-http}://${APP_DOMAIN:-localhost}"
         },
         {
           "key": "AUTH_SECRET",
