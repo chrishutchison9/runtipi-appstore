@@ -7,6 +7,10 @@
       "internalPort": 3000,
       "environment": [
         {
+          "key": "TZ",
+          "value": "${TZ}"
+        },
+        {
           "key": "CONFIG_PATH",
           "value": "/data/config.json"
         },
@@ -57,18 +61,24 @@
         }
       },
       "user": "1500:1500",
+      "stopGracePeriod": "30s",
       "logging": {
         "driver": "json-file",
         "options": {
           "max-size": "10mb",
           "max-file": "1"
         }
-      }
+      },
+      "securityOpt": ["no-new-privileges:true"]
     },
     {
       "name": "sourcebot-postgres",
       "image": "postgres:16-alpine",
       "environment": [
+        {
+          "key": "TZ",
+          "value": "${TZ}"
+        },
         {
           "key": "POSTGRES_USER",
           "value": "sourcebot"
@@ -99,6 +109,12 @@
     {
       "name": "sourcebot-redis",
       "image": "redis:7-alpine",
+      "environment": [
+        {
+          "key": "TZ",
+          "value": "${TZ}"
+        }
+      ],
       "volumes": [
         {
           "hostPath": "${APP_DATA_DIR}/data/redis",

@@ -13,6 +13,8 @@
   "tipi_version": 2,
   "min_tipi_version": "4.5.0",
   "version": "v4.10.28",
+  "uid": 1500,
+  "gid": 1500,
   "source": "https://github.com/sourcebot-dev/sourcebot",
   "website": "https://sourcebot.dev",
   "exposable": true,
