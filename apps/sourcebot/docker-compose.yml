@@ -57,9 +57,22 @@ services:
   sourcebot-init:
     image: alpine:3.19
     container_name: sourcebot-init
-    command: sh -c "if [ ! -f /data/config.json ]; then cp /sourcebot-config.json /data/config.json; fi && chown -R 1500:1500 /data"
+    command: >-
+      sh -lc "if [ ! -f /data/config.json ]; then cat << 'EOF' > /data/config.json
+      {
+        \"$schema\": \"https://raw.githubusercontent.com/sourcebot-dev/sourcebot/main/schemas/v3/index.json\",
+        \"connections\": {
+          \"starter-connection\": {
+            \"type\": \"github\",
+            \"repos\": [
+              \"sourcebot-dev/sourcebot\"
+            ]
+          }
+        }
+      }
+      EOF
+      fi && chown -R 1500:1500 /data"
     volumes:
-      - ./sourcebot-config.json:/sourcebot-config.json
       - ${APP_DATA_DIR}/data/app:/data
     restart: "no"
     logging:
