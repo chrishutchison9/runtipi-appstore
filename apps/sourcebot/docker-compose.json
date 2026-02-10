@@ -92,7 +92,8 @@
         "test": "CMD-SHELL pg_isready -U sourcebot",
         "interval": "3s",
         "timeout": "3s",
-        "retries": 10
+        "retries": 10,
+        "startPeriod": "20s"
       }
     },
     {
@@ -108,13 +109,14 @@
         "test": "CMD redis-cli ping",
         "interval": "3s",
         "timeout": "10s",
-        "retries": 10
+        "retries": 10,
+        "startPeriod": "10s"
       }
     },
     {
       "name": "sourcebot-init",
       "image": "alpine:3.19",
-      "command": "sh -lc \"if [ ! -f /data/config.json ]; then cat << 'EOF' > /data/config.json\\n{\\n  \\\"$schema\\\": \\\"https://raw.githubusercontent.com/sourcebot-dev/sourcebot/main/schemas/v3/index.json\\\",\\n  \\\"connections\\\": {\\n    \\\"starter-connection\\\": {\\n      \\\"type\\\": \\\"github\\\",\\n      \\\"repos\\\": [\\n        \\\"sourcebot-dev/sourcebot\\\"\\n      ]\\n    }\\n  }\\n}\\nEOF\\nfi && chown -R 1500:1500 /data\"",
+      "command": "sh -c \"if [ ! -f /data/config.json ]; then cat << 'EOF' > /data/config.json\\n{\\n  \\\"$schema\\\": \\\"https://raw.githubusercontent.com/sourcebot-dev/sourcebot/main/schemas/v3/index.json\\\",\\n  \\\"connections\\\": {\\n    \\\"starter-connection\\\": {\\n      \\\"type\\\": \\\"github\\\",\\n      \\\"repos\\\": [\\n        \\\"sourcebot-dev/sourcebot\\\"\\n      ]\\n    }\\n  }\\n}\\nEOF\\nfi && chown -R 1500:1500 /data\"",
       "volumes": [
         {
           "hostPath": "${APP_DATA_DIR}/data/app",

@@ -58,7 +58,7 @@ services:
     image: alpine:3.19
     container_name: sourcebot-init
     command: >-
-      sh -lc "if [ ! -f /data/config.json ]; then cat << 'EOF' > /data/config.json
+      sh -c "if [ ! -f /data/config.json ]; then cat << 'EOF' > /data/config.json
       {
         \"$schema\": \"https://raw.githubusercontent.com/sourcebot-dev/sourcebot/main/schemas/v3/index.json\",
         \"connections\": {
