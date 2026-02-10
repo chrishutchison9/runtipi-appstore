@@ -120,14 +120,7 @@
           "hostPath": "${APP_DATA_DIR}/data/redis",
           "containerPath": "/data"
         }
-      ],
-      "healthCheck": {
-        "test": "CMD redis-cli ping",
-        "interval": "3s",
-        "timeout": "10s",
-        "retries": 10,
-        "startPeriod": "20s"
-      }
+      ]
     },
     {
       "name": "sourcebot-init",
