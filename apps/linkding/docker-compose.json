@@ -1,9 +1,10 @@
 {
-  "$schema": "../dynamic-compose-schema.json",
+  "schemaVersion": 2,
+  "$schema": "https://schemas.runtipi.io/v2/dynamic-compose.json",
   "services": [
     {
       "name": "linkding",
-      "image": "sissbruecker/linkding:1.39.1",
+      "image": "sissbruecker/linkding:1.40.0",
       "isMain": true,
       "internalPort": 9090,
       "environment": {

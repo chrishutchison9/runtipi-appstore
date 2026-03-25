@@ -5,44 +5,17 @@
       "image": "ghcr.io/sourcebot-dev/sourcebot:v4.10.28",
       "isMain": true,
       "internalPort": 3000,
-      "environment": [
-        {
-          "key": "TZ",
-          "value": "${TZ}"
-        },
-        {
-          "key": "CONFIG_PATH",
-          "value": "/data/config.json"
-        },
-        {
-          "key": "AUTH_URL",
-          "value": "${APP_PROTOCOL:-http}://${APP_DOMAIN:-localhost}"
-        },
-        {
-          "key": "AUTH_SECRET",
-          "value": "${AUTH_SECRET}"
-        },
-        {
-          "key": "SOURCEBOT_ENCRYPTION_KEY",
-          "value": "${SOURCEBOT_ENCRYPTION_KEY}"
-        },
-        {
-          "key": "DATABASE_URL",
-          "value": "postgresql://sourcebot:${SOURCEBOT_POSTGRES_PASSWORD}@sourcebot-postgres:5432/sourcebot"
-        },
-        {
-          "key": "REDIS_URL",
-          "value": "redis://sourcebot-redis:6379"
-        },
-        {
-          "key": "OPENAI_API_KEY",
-          "value": "${OPENAI_API_KEY}"
-        },
-        {
-          "key": "ANTHROPIC_API_KEY",
-          "value": "${ANTHROPIC_API_KEY}"
-        }
-      ],
+      "environment": {
+        "TZ": "${TZ}",
+        "CONFIG_PATH": "/data/config.json",
+        "AUTH_URL": "${APP_PROTOCOL:-http}://${APP_DOMAIN:-localhost}",
+        "AUTH_SECRET": "${AUTH_SECRET}",
+        "SOURCEBOT_ENCRYPTION_KEY": "${SOURCEBOT_ENCRYPTION_KEY}",
+        "DATABASE_URL": "postgresql://sourcebot:${SOURCEBOT_POSTGRES_PASSWORD}@sourcebot-postgres:5432/sourcebot",
+        "REDIS_URL": "redis://sourcebot-redis:6379",
+        "OPENAI_API_KEY": "${OPENAI_API_KEY}",
+        "ANTHROPIC_API_KEY": "${ANTHROPIC_API_KEY}"
+      },
       "volumes": [
         {
           "hostPath": "${APP_DATA_DIR}/data/app",
@@ -82,24 +55,12 @@
     {
       "name": "sourcebot-postgres",
       "image": "postgres:16-alpine",
-      "environment": [
-        {
-          "key": "TZ",
-          "value": "${TZ}"
-        },
-        {
-          "key": "POSTGRES_USER",
-          "value": "sourcebot"
-        },
-        {
-          "key": "POSTGRES_PASSWORD",
-          "value": "${SOURCEBOT_POSTGRES_PASSWORD}"
-        },
-        {
-          "key": "POSTGRES_DB",
-          "value": "sourcebot"
-        }
-      ],
+      "environment": {
+        "TZ": "${TZ}",
+        "POSTGRES_USER": "sourcebot",
+        "POSTGRES_PASSWORD": "${SOURCEBOT_POSTGRES_PASSWORD}",
+        "POSTGRES_DB": "sourcebot"
+      },
       "volumes": [
         {
           "hostPath": "${APP_DATA_DIR}/data/postgres",
@@ -117,12 +78,9 @@
     {
       "name": "sourcebot-redis",
       "image": "redis:7-alpine",
-      "environment": [
-        {
-          "key": "TZ",
-          "value": "${TZ}"
-        }
-      ],
+      "environment": {
+        "TZ": "${TZ}"
+      },
       "volumes": [
         {
           "hostPath": "${APP_DATA_DIR}/data/redis",
@@ -143,8 +101,7 @@
           "hostPath": "${APP_DATA_DIR}/data/app",
           "containerPath": "/data"
         }
-      ],
-      "restart": "no"
+      ]
     }
   ],
   "schemaVersion": 2,
