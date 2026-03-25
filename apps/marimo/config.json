@@ -1,0 +1,22 @@
+{
+  "$schema": "../app-info-schema.json",
+  "name": "marimo",
+  "available": true,
+  "exposable": true,
+  "dynamic_config": true,
+  "port": 8080,
+  "id": "marimo",
+  "tipi_version": 1,
+  "version": "0.21.1",
+  "categories": ["development", "data"],
+  "description": "marimo is a reactive Python notebook that stores notebooks as Python files and can be used for data exploration, dashboards, and app-like workflows.",
+  "short_desc": "Reactive Python notebooks stored as pure Python files.",
+  "author": "marimo-team",
+  "source": "https://github.com/marimo-team/marimo",
+  "website": "https://marimo.io/",
+  "form_fields": [],
+  "supported_architectures": ["arm64", "amd64"],
+  "created_at": 1774473969313,
+  "updated_at": 1774473969313,
+  "min_tipi_version": "4.5.0"
+}

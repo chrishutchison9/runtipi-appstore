@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 2,
+  "$schema": "https://schemas.runtipi.io/v2/dynamic-compose.json",
+  "services": [
+    {
+      "name": "marimo",
+      "image": "ghcr.io/marimo-team/marimo:0.21.1-data",
+      "isMain": true,
+      "internalPort": 8080,
+      "command": ["marimo", "edit", "--no-token", "-p", "8080", "--host", "0.0.0.0", "/workspaces"],
+      "volumes": [
+        {
+          "hostPath": "${APP_DATA_DIR}/workspaces",
+          "containerPath": "/workspaces"
+        }
+      ],
+      "healthCheck": {
+        "interval": "30s",
+        "timeout": "5s",
+        "retries": 5,
+        "startPeriod": "30s",
+        "test": "python -c 'import urllib.request; urllib.request.urlopen(\"http://127.0.0.1:8080/health\")'"
+      }
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+version: "3.8"
+
+services:
+  marimo:
+    image: ghcr.io/marimo-team/marimo:0.21.1-data
+    container_name: marimo
+    restart: unless-stopped
+    command:
+      - marimo
+      - edit
+      - --no-token
+      - -p
+      - "8080"
+      - --host
+      - 0.0.0.0
+      - /workspaces
+    ports:
+      - ${APP_PORT}:8080
+    volumes:
+      - ${APP_DATA_DIR}/workspaces:/workspaces
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - import urllib.request; urllib.request.urlopen("http://127.0.0.1:8080/health")
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - tipi_main_network
+    labels:
+      traefik.enable: true
+      traefik.http.middlewares.marimo-web-redirect.redirectscheme.scheme: https
+      traefik.http.services.marimo.loadbalancer.server.port: 8080
+      traefik.http.routers.marimo-insecure.rule: Host(`${APP_DOMAIN}`)
+      traefik.http.routers.marimo-insecure.entrypoints: web
+      traefik.http.routers.marimo-insecure.service: marimo
+      traefik.http.routers.marimo-insecure.middlewares: marimo-web-redirect
+      traefik.http.routers.marimo.rule: Host(`${APP_DOMAIN}`)
+      traefik.http.routers.marimo.entrypoints: websecure
+      traefik.http.routers.marimo.service: marimo
+      traefik.http.routers.marimo.tls.certresolver: myresolver
+      traefik.http.routers.marimo-local-insecure.rule: Host(`marimo.${LOCAL_DOMAIN}`)
+      traefik.http.routers.marimo-local-insecure.entrypoints: web
+      traefik.http.routers.marimo-local-insecure.service: marimo
+      traefik.http.routers.marimo-local-insecure.middlewares: marimo-web-redirect
+      traefik.http.routers.marimo-local.rule: Host(`marimo.${LOCAL_DOMAIN}`)
+      traefik.http.routers.marimo-local.entrypoints: websecure
+      traefik.http.routers.marimo-local.service: marimo
+      traefik.http.routers.marimo-local.tls: true
+      runtipi.managed: true
